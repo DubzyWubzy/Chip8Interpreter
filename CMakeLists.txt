@@ -7,8 +7,6 @@ set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(dependencies/minifb)
 
-add_executable(Chip8Interpreter main.c
-        hardware.cpp
-        hardware.h)
+add_executable(Chip8Interpreter main.c)
 
 target_link_libraries(${PROJECT_NAME} minifb)
