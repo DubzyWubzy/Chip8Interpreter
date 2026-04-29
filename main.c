@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <MiniFB.h>
+#include <unistd.h>
 
 #define WIDTH  832
 #define HEIGHT 416
@@ -107,6 +108,7 @@ int drawWindow()
 
 
 
+
 int main(void)
 {
     // declare the Chip-8 RAM space
@@ -114,10 +116,17 @@ int main(void)
     // entry in the memory will be as well
     // 12 bit index pointer, the maximum of this is 4096
 
+    uint16_t programCounter; // the CPU's PC, will be moved to its own little place soon
+
     initializeFont(systemMemory);
 
-    drawWindow();
+    //drawWindow(); // TODO: put this on a separate thread
 
-
+    // gonna put the fetch/decode/execute stuff in main for now and extract it later
+    while (true) {
+        // this gets us to about 700 instructions per second (hopefully)
+        usleep(10000.0f/7.0f); // TODO: another magic number to get rid of
+        
+    }
 
 }
