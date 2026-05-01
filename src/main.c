@@ -1,20 +1,27 @@
-#include <unistd.h>
+
 
 #include "display.h"
 #include "memory.h"
 #include "processor.h"
 
+#include <pthread.h>
+
+void* backgroundActivities(void* arg)
+{
+    FDE(systemMemory);
+}
+
 
 int main(void)
 {
+    pthread_t processThread;
+    if (pthread_create(&processThread, NULL, backgroundActivities, NULL) != 0)
+    {
+        printf("%s", "Couldn't create background non-UI thread.");
+        return 1;
+    };
     initializeFont(systemMemory);
 
-    drawWindow(systemMemory); // TODO: put this on a separate thread
+    drawWindow(systemMemory);
 
-    // gonna put the fetch/decode/execute stuff in main for now and extract it later
-    while (true) {
-        // this gets us to about 700 instructions per second (hopefully)
-        usleep(10000.0f/7.0f); // TODO: another magic number to get rid of
-        
-    }
 }

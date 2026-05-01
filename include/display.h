@@ -1,19 +1,17 @@
 #pragma once
 
-#define WIDTH  832
-#define HEIGHT 416
-
-#define LOGICAL_WIDTH 64
-#define LOGICAL_HEIGHT 32
-#define SCALE 13
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h> // why didn't i need this in main...
 #include <MiniFB.h>
 
 // BELOW CONSTS ARE INTERNAL FOR THE DISPLAY
+#define WIDTH  832
+#define HEIGHT 416
 
+#define LOGICAL_WIDTH 64
+#define LOGICAL_HEIGHT 32
+#define SCALE 13
 
 
 uint32_t buffer[WIDTH * HEIGHT]; // this is the main GUI window buffer

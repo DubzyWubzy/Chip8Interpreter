@@ -33,7 +33,7 @@ void reset() {
 void printHexChar(const uint8_t *systemMemory, const uint8_t hexToPrint, const int initialX, int initialY)
 {
     uint16_t tempIndexRegister = (0x50 + (hexToPrint * 0x5));
-    // TODO: verify that hex is between 0-F
+
     if (hexToPrint < 0x0 || hexToPrint > 0xF) {printf("%s\n", "Invalid character to print"); return;}
 
     for (int i = 0; i < 5; i++)
