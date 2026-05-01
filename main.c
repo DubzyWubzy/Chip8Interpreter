@@ -23,7 +23,7 @@ struct callStack
     // capacity (may not need this...?)
 };
 
-void initializeFont(uint16_t *systemMemory)
+void initializeFont(uint8_t *systemMemory)
 {
     uint16_t tempIndexRegister = 0x50; // fonts go from 0x050 to 0x09F
 
@@ -79,18 +79,59 @@ void reset() {
         buffer[i] = 0x00000000;
 }
 
+// TODO: fill screen function?
 
-int drawWindow()
+
+int drawWindow(uint8_t *systemMemory)
 {
+
+    // TEMP VARIABLES FOR TESTING
+    int initialX = 20;
+    int initialY = 10; // these will be helper function arguments
+
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
+
+    uint16_t tempIndexRegister = 0x50; // DELETE THIS, for testing purposes
+
     mfb_update_state state;
+
+    for (int i = 0; i < 5; i++)
+    {
+        uint8_t currentLine = (systemMemory[tempIndexRegister]/16); // the /16 is to make the 8 bit number
+        //into the four bit number relevant for font data
+
+        for (int j = 0; j < 4; j++) {
+            if ((currentLine & (1 << (3-j)))) // TODO: FIX THIS
+            //if (1 == 1)
+            {
+                set_logical_pixel(initialX + j, (initialY + i), true);
+                printf("%s\n", "LINE | PIXEL");
+                printf("%i    ", initialY + i);
+                printf("%i\n", initialX + j);
+            }
+        }
+        tempIndexRegister += 0x1;
+    }
+
+
+
     do {
-        // step 1: turn the pixels into logical pixels
+        // making sure the logical pixels work
+        ///*
         set_logical_pixel(0, 0, true);
-        set_logical_pixel(63, 31, true);
+        //set_logical_pixel(63, 31, true);
         set_logical_pixel(0, 31, true);
         set_logical_pixel(63, 0, true);
+        //*/
+
+        // now how would we take the font data effectively
+
+        // lets just try to print the "0" character
+        // each location in memory consists of 4 pixels, then shifts down
+        // five locations per, let's use this tried and true loop:
+
+
 
 
         state = mfb_update_ex(window, buffer, WIDTH, HEIGHT);
@@ -112,15 +153,26 @@ int drawWindow()
 int main(void)
 {
     // declare the Chip-8 RAM space
-    uint16_t systemMemory[4096]; // as the index register is 16 bits, each
-    // entry in the memory will be as well
+    uint8_t systemMemory[4096];
     // 12 bit index pointer, the maximum of this is 4096
 
-    uint16_t programCounter; // the CPU's PC, will be moved to its own little place soon
+    uint8_t cpuRegisters[22] = {0}; // the CPU's PC, will be moved to its own little place soon
+
+    /* INDEXES:
+     * 0-1 = PC (Program Counter
+     * 2-3 = I (Instruction Counter)
+     * 4 = Delay Timer
+     * 5 = Sound Timer
+     * 6-21 = V0-VF GP registers
+    */
+
+
+    //cpuRegisters[2] = 0x00;
+    //cpuRegisters[3] = 0x00;
 
     initializeFont(systemMemory);
 
-    //drawWindow(); // TODO: put this on a separate thread
+    drawWindow(systemMemory); // TODO: put this on a separate thread
 
     // gonna put the fetch/decode/execute stuff in main for now and extract it later
     while (true) {
