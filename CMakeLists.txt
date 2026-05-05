@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 4.1)
 project(Chip8Interpreter C CXX)
 
 option(MINIFB_USE_METAL_API "Use Metal API" ON)
