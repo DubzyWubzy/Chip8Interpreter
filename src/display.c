@@ -3,7 +3,7 @@
 
 
 // helper functions for drawWindow
-void set_pixel(int x, int y, bool on)
+void set_pixel(int x, int y, bool on, uint32_t *buffer)
 {
     uint32_t color;
     if (on) {color = 0xFFFFFFFF;} else {color = 0x00000000;}
@@ -14,15 +14,15 @@ void set_pixel(int x, int y, bool on)
     }
 }
 
-void set_logical_pixel(int x, int y, bool on) {
+void set_logical_pixel(int x, int y, bool on, uint32_t *buffer) {
     if ((x >= 0) && (x < LOGICAL_WIDTH) && (y >= 0) && (y < LOGICAL_HEIGHT)) {
         for (int dy = 0; dy < SCALE; dy++)
             for (int dx = 0; dx < SCALE; dx++)
-                set_pixel(x * SCALE + dx, y * SCALE + dy, on);
+                set_pixel(x * SCALE + dx, y * SCALE + dy, on, buffer);
     }
 }
 
-void reset() {
+void reset(uint32_t *buffer) {
     for (int i = 0; i < WIDTH * HEIGHT; i++)
         buffer[i] = 0x00000000;
 }
@@ -30,7 +30,7 @@ void reset() {
 // TODO: fill screen function?
 
 // we may need to change this function to printSprite in accordance to the DXYN command
-void printHexChar(const uint8_t *systemMemory, const uint8_t hexToPrint, const int initialX, int initialY)
+void printHexChar(const uint8_t *systemMemory, const uint8_t hexToPrint, const int initialX, int initialY, uint32_t *buffer)
 {
     uint16_t tempIndexRegister = (0x50 + (hexToPrint * 0x5));
 
@@ -44,7 +44,7 @@ void printHexChar(const uint8_t *systemMemory, const uint8_t hexToPrint, const i
         for (int j = 0; j < 4; j++) {
             if ((currentLine & (1 << (3-j))))
             {
-                set_logical_pixel(initialX + j, (initialY + i), true);
+                set_logical_pixel(initialX + j, (initialY + i), true, buffer);
             }
         }
         tempIndexRegister += 0x1;
@@ -52,7 +52,7 @@ void printHexChar(const uint8_t *systemMemory, const uint8_t hexToPrint, const i
 }
 
 
-int drawWindow(uint8_t *systemMemory)
+int drawWindow(uint8_t *systemMemory, uint32_t *buffer)
 {
 
     // TEMP VARIABLES FOR TESTING
@@ -61,7 +61,7 @@ int drawWindow(uint8_t *systemMemory)
 
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
-    printHexChar(systemMemory, 3, 20, 10);
+    printHexChar(systemMemory, 3, 30, 20, buffer);
 
     mfb_update_state state;
 

@@ -6,6 +6,7 @@
 #include <stdlib.h> // TODO: put this in the cmakelists
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #define STACK_SIZE 16 // for 16 2-byte entires
 
@@ -22,7 +23,6 @@ struct callStack
 
 
 // declare the Chip-8 RAM space
-uint8_t systemMemory[4096]; // TODO: initialize this in its own function
 // 12 bit index pointer, the maximum of this is 4096
 
 

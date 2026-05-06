@@ -10,7 +10,7 @@
 */
 
 
-uint16_t fetch(const uint8_t *systemMemory)
+uint16_t fetch(const uint8_t *systemMemory, uint8_t *cpuRegisters)
 {
     // read two-byte instruction from PC
     const uint16_t PC = {(cpuRegisters[0] << 8) | cpuRegisters[1]};
@@ -35,14 +35,14 @@ void execute()
 
 }
 
-void FDE(const uint8_t *systemMemory)
+void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters)
 {
     cpuRegisters[0] = 0x02; // so that the program space starts at PC = 0x0200
     cpuRegisters[1] = 0x00; // TODO: put this in some sort of initCpu function
 
     while (true) {
 
-        decode(fetch(systemMemory));
+        decode(fetch(systemMemory, cpuRegisters));
         execute();
 
         // this gets us to about 700 instructions per second

@@ -6,9 +6,14 @@
 
 #include <pthread.h>
 
+uint32_t buffer[WIDTH * HEIGHT]; // this is the main GUI window buffer
+uint8_t systemMemory[4096]; // TODO: initialize this in its own function
+uint8_t cpuRegisters[22];
+
+
 void* backgroundActivities(void* arg)
 {
-    FDE(systemMemory);
+    FDE(systemMemory, cpuRegisters);
 }
 
 
@@ -22,6 +27,6 @@ int main(void)
     };
     initializeFont(systemMemory);
 
-    drawWindow(systemMemory);
+    drawWindow(systemMemory, buffer);
 
 }

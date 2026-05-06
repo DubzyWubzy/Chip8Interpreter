@@ -5,10 +5,10 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <unistd.h>
 
-uint8_t cpuRegisters[22];
 
 /* INDEXES:
  * 0-1 = PC (Program Counter
@@ -19,4 +19,4 @@ uint8_t cpuRegisters[22];
 */
 
 
-void FDE(const uint8_t *systemMemory);
+void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters);
