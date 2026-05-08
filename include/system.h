@@ -36,7 +36,7 @@ extern struct registerStruct
     uint8_t delayTimer;
     uint8_t soundTimer;
 
-    uint8_t VX[16]; // GP registers
+    uint8_t V[16]; // GP registers
 };
 
 extern struct registerStruct cpuRegisters;

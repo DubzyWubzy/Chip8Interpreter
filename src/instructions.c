@@ -78,14 +78,14 @@ inline void op5()
 inline void op6()
 {
     // 6XNN (set register VX)
-    cpuRegisters.VX[X] = NN;
+    cpuRegisters.V[X] = NN;
 
 }
 
 inline void op7()
 {
     //7XNN (add value to register VX)
-    cpuRegisters.VX[X] += NN;
+    cpuRegisters.V[X] += NN;
 }
 
 inline void op8()
@@ -129,8 +129,8 @@ inline void opD()
 
     // oh lord...
     //The first thing to do is to get the X and Y coordinates from VX and VY.
-    uint8_t vx_coord = cpuRegisters.VX[X];
-    uint8_t vy_coord = cpuRegisters.VX[Y]; // yea kinda messy ngl...
+    uint8_t vx_coord = cpuRegisters.V[X];
+    uint8_t vy_coord = cpuRegisters.V[Y];
 
     // The starting position will wrap
     // but the drawing of the sprite itself will not.
