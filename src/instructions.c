@@ -1,14 +1,9 @@
-/* INDEXES:
-* 0-1 = PC (Program Counter (for instructions))
- * 2-3 = I (Index Counter (for memory))
- * 4 = Delay Timer
- * 5 = Sound Timer
- * 6-21 = V0-VF GP registers
-*/
-
-
 
 #include "instructions.h"
+
+#include <display.h>
+#include "system.h"
+
 
 
 uint8_t op;
@@ -39,6 +34,8 @@ void instruction_execute(const uint16_t instruction)
 
 }
 
+// TODO: more robust checking
+
 inline void op0()
 {
     if (X == 0)
@@ -54,9 +51,8 @@ inline void op0()
 
 inline void op1()
 {
-    // jump, set PC to NNN
-
-
+    // jump: set PC to NNN
+    cpuRegisters.programCounter = NNN;
 }
 
 inline void op2()
@@ -81,12 +77,15 @@ inline void op5()
 
 inline void op6()
 {
+    // 6XNN (set register VX)
+    cpuRegisters.VX[X] = NN;
 
 }
 
 inline void op7()
 {
-
+    //7XNN (add value to register VX)
+    cpuRegisters.VX[X] += NN;
 }
 
 inline void op8()
@@ -101,6 +100,8 @@ inline void op9()
 
 inline void opA()
 {
+    //ANNN (set index register I)
+    cpuRegisters.indexPointer = NNN;
 
 }
 
@@ -116,6 +117,29 @@ inline void opC()
 
 inline void opD()
 {
+    //DXYN (display/draw)
+
+    /*
+    It will draw an N pixels tall sprite from the memory location that the I index register is
+    holding to the screen, at the horizontal X coordinate in VX and the Y coordinate in VY. All
+    the pixels that are “on” in the sprite will flip the pixels on the screen that it is drawn to
+    (from left to right, from most to least significant bit). If any pixels on the screen were turned
+    “off” by this, the VF flag register is set to 1. Otherwise, it’s set to 0.
+    */
+
+    // oh lord...
+    //The first thing to do is to get the X and Y coordinates from VX and VY.
+    uint8_t vx_coord = cpuRegisters.VX[X];
+    uint8_t vy_coord = cpuRegisters.VX[Y]; // yea kinda messy ngl...
+
+    // The starting position will wrap
+    // but the drawing of the sprite itself will not.
+
+    // ensure that the initial coords are in bounds:
+    vx_coord = vx_coord % WIDTH;
+    vy_coord = vx_coord % HEIGHT;
+
+
 
 }
 

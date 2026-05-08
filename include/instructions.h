@@ -9,8 +9,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#include <memory.h>
-#include <display.h>
+
 /*
 // clear screen
 void ins_00E0();

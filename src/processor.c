@@ -1,9 +1,14 @@
-#include <stdio.h>
-
 #include "processor.h"
 
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <unistd.h>
 
-uint8_t cpuRegisters[22];
+#include <processor.h>
+#include "system.h"
+
+
 
 /* INDEXES:
  * 0-1 = PC (Program Counter (for instructions))
@@ -19,16 +24,14 @@ uint8_t cpuRegisters[22];
 uint16_t fetch()
 {
     // read two-byte instruction from PC
-    const uint16_t PC = {(cpuRegisters[0] << 8) | cpuRegisters[1]};
+    const uint16_t PC = cpuRegisters.programCounter;
 
-    // you're fetching the MEMORY FROM the address, NOT the address itself
 
     // increment PC by 2
-    cpuRegisters[0] = (PC + 2) >> 8;
-    cpuRegisters[1] = (PC + 2);
+    cpuRegisters.programCounter = PC + 2;
 
-
-    return (systemMemory[PC] << 8) | (systemMemory[PC + 1]);
+    // we're fetching the MEMORY FROM the address, NOT the address itself
+    return systemMemory[PC];
 }
 
 void decodeAndExecute(uint16_t instruction)
@@ -39,8 +42,7 @@ void decodeAndExecute(uint16_t instruction)
 
 void FDE()
 {
-    cpuRegisters[0] = 0x02; // so that the program space starts at PC = 0x0200
-    cpuRegisters[1] = 0x00; // TODO: put this in some sort of initCpu function
+    cpuRegisters.programCounter = 0x0002;
 
     while (true) {
 

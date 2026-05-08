@@ -1,6 +1,7 @@
 #include "memory.h"
 
-uint8_t systemMemory[4096];
+#include "system.h"
+
 
 void initializeFont()
 {

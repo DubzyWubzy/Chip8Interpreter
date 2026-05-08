@@ -20,7 +20,7 @@
  * 5 = Sound Timer
  * 6-21 = V0-VF GP registers
 */
-uint8_t cpuRegisters[22];
+
 
 // TODO: Implement timers
 

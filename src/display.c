@@ -1,6 +1,7 @@
 #include "display.h"
 
-uint32_t buffer[WIDTH * HEIGHT];
+#include "system.h"
+
 
 // helper functions for drawWindow
 void set_pixel(int x, int y, bool on)
@@ -52,12 +53,8 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 }
 
 
-int drawWindow(uint8_t *systemMemory)
+int drawWindow()
 {
-
-    // TEMP VARIABLES FOR TESTING
-    int initialX = 20;
-    int initialY = 10; // these will be helper function arguments
 
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 

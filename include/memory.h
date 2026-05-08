@@ -11,7 +11,7 @@
 #define STACK_SIZE 16 // for 16 2-byte entires
 
 
-extern uint8_t systemMemory[4096];
+//extern uint8_t systemMemory[4096];
 
 
 struct callStack
