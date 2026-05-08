@@ -1,8 +1,8 @@
 #include "memory.h"
 
+uint8_t systemMemory[4096];
 
-
-void initializeFont(uint8_t *systemMemory)
+void initializeFont()
 {
     uint16_t tempIndexRegister = 0x50; // fonts go from 0x050 to 0x09F
 

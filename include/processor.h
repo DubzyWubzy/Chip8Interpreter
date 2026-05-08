@@ -9,6 +9,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#include "memory.h"
+#include "instructions.h"
+
 
 /* INDEXES:
  * 0-1 = PC (Program Counter
@@ -17,9 +20,9 @@
  * 5 = Sound Timer
  * 6-21 = V0-VF GP registers
 */
+uint8_t cpuRegisters[22];
 
 // TODO: Implement timers
 
 
-
-void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters);
+void FDE();

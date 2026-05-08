@@ -11,6 +11,7 @@
 #define STACK_SIZE 16 // for 16 2-byte entires
 
 
+extern uint8_t systemMemory[4096];
 
 
 struct callStack
@@ -26,4 +27,4 @@ struct callStack
 // 12 bit index pointer, the maximum of this is 4096
 
 
-void initializeFont(uint8_t *systemMemory);
+void initializeFont();
