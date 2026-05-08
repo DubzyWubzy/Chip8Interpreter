@@ -10,6 +10,8 @@
 */
 
 
+
+
 uint16_t fetch(const uint8_t *systemMemory, uint8_t *cpuRegisters)
 {
     // read two-byte instruction from PC
@@ -25,14 +27,30 @@ uint16_t fetch(const uint8_t *systemMemory, uint8_t *cpuRegisters)
     return (systemMemory[PC] << 8) | (systemMemory[PC + 1]);
 }
 
-void decode(uint16_t PC)
+void decodeAndExecute(uint16_t instruction)
 {
+    uint8_t op = ((instruction && 0b1111000000000000) >> 12); // using this for the switch statement
+    uint8_t X = ((instruction && 0b0000111100000000) >> 8); // register
+    uint8_t Y = ((instruction && 0b0000000011110000) >> 4); // register
+    uint8_t N = (instruction && 0b0000000000001111); // 4 bit number
 
-}
+    uint8_t NN = ((Y << 4) | N); // 8-bit IMMediate number
+    uint16_t NNN = ((X << 8) | X); // 12-bit address
 
-void execute()
-{
+    /* start with:
+    00E0 (clear screen) [easy]
+    1NNN (jump) [set PC to NNN=
+    6XNN (set register VX)
+    7XNN (add value to register VX)
+    ANNN (set index register I)
+    DXYN (display/draw)
+    */
 
+    switch (op)
+    {
+    case 1:
+
+    }
 }
 
 void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters)
@@ -42,9 +60,7 @@ void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters)
 
     while (true) {
 
-        decode(fetch(systemMemory, cpuRegisters));
-        execute();
-
+        decodeAndExecute(fetch(systemMemory, cpuRegisters));
         // this gets us to about 700 instructions per second
         usleep(10000.0f/7.0f); // TODO: another magic number to get rid of
     }

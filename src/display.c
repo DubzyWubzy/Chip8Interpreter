@@ -61,7 +61,7 @@ int drawWindow(uint8_t *systemMemory, uint32_t *buffer)
 
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
-    printHexChar(systemMemory, 3, 30, 20, buffer);
+    //printHexChar(systemMemory, 3, 30, 20, buffer);
 
     mfb_update_state state;
 

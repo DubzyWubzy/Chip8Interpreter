@@ -27,6 +27,11 @@ int main(void)
     };
     initializeFont(systemMemory);
 
+    printHexChar(systemMemory, 0xF, 30, 10, buffer);
+
     drawWindow(systemMemory, buffer);
+
+
+
 
 }

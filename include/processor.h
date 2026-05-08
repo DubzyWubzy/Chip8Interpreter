@@ -18,5 +18,8 @@
  * 6-21 = V0-VF GP registers
 */
 
+// TODO: Implement timers
+
+
 
 void FDE(const uint8_t *systemMemory, uint8_t *cpuRegisters);
