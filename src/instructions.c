@@ -3,6 +3,7 @@
 
 #include <display.h>
 #include "system.h"
+#include "display.h"
 
 
 
@@ -13,28 +14,7 @@ uint8_t N;
 
 uint8_t NN;
 uint16_t NNN;
-void instruction_execute(const uint16_t instruction)
-{
-    op = ((instruction & 0b1111000000000000) >> 12); // using this for the switch statement
-    X = ((instruction & 0b0000111100000000) >> 8); // register
-    Y = ((instruction & 0b0000000011110000) >> 4); // register
-    N = (instruction & 0b0000000000001111); // 4 bit number
 
-    NN = ((Y << 4) | N); // 8-bit IMMediate number
-    NNN = ((X << 8) | X); // 12-bit address
-
-    /* start with:
-    00E0 (clear screen) [easy]
-    1NNN (jump) [set PC to NNN=
-    6XNN (set register VX)
-    7XNN (add value to register VX)
-    ANNN (set index register I)
-    DXYN (display/draw)
-    */
-
-}
-
-// TODO: more robust checking
 
 inline void op0()
 {
@@ -129,18 +109,12 @@ inline void opD()
 
     // oh lord...
     //The first thing to do is to get the X and Y coordinates from VX and VY.
-    uint8_t vx_coord = cpuRegisters.V[X];
-    uint8_t vy_coord = cpuRegisters.V[Y];
 
     // The starting position will wrap
     // but the drawing of the sprite itself will not.
 
-    // ensure that the initial coords are in bounds:
-    vx_coord = vx_coord % WIDTH;
-    vy_coord = vx_coord % HEIGHT;
-
-
-
+    // ensure that the initial coords wrap around the bounds and call the printSprite function
+    printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
 }
 
 inline void opE()
@@ -154,3 +128,33 @@ inline void opF()
 }
 
 
+
+void instruction_execute(const uint16_t instruction)
+{
+    op = ((instruction & 0b1111000000000000) >> 12); // using this for the switch statement
+    X = ((instruction & 0b0000111100000000) >> 8); // register
+    Y = ((instruction & 0b0000000011110000) >> 4); // register
+    N = (instruction & 0b0000000000001111); // 4 bit number
+
+    NN = ((Y << 4) | N); // 8-bit IMMediate number
+    NNN = ((X << 8) | X); // 12-bit address
+
+    /* start with:
+    00E0 (clear screen) [easy]
+    1NNN (jump) [set PC to NNN=
+    6XNN (set register VX)
+    7XNN (add value to register VX)
+    ANNN (set index register I)
+    DXYN (display/draw)
+    */
+
+    if (op == 0x0) {op0();}
+    if (op == 0x1) {op0();}
+    if (op == 0x6) {op0();}
+    if (op == 0x7) {op0();}
+    if (op == 0xA) {op0();}
+    if (op == 0xD) {op0();}
+
+}
+
+// TODO: more robust checking

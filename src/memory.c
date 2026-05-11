@@ -1,7 +1,26 @@
 #include "memory.h"
 
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include "system.h"
 
+
+int loadProgram(char programFile[])
+{
+    const int fptr = open(programFile, O_RDONLY);
+
+    if (fptr==-1) {printf("%s\n","Invalid program file"); return 1;}
+
+
+
+    size_t r = read(fptr, systemMemory + 0x200, 4096 - 0x200); // ANOTHER case of the magic number
+
+    if (r == -1) {printf("%s\n","ERROR WHEN COPYING PROGRAM TO MEMORY!");}
+
+    close(fptr);
+    return 0;
+}
 
 void initializeFont()
 {

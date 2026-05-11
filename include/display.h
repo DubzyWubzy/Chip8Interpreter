@@ -17,4 +17,7 @@ void resetScreen();
 // we may need to change this function to printSprite in accordance to the DXYN command
 void printHexChar(uint8_t hexToPrint, int initialX, int initialY);
 
-int drawWindow();
+void printSprite(int initialX, int initialY, int rowCount);
+
+
+int updateWindow(struct mfb_window *window);

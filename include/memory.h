@@ -11,8 +11,6 @@
 #define STACK_SIZE 16 // for 16 2-byte entires
 
 
-//extern uint8_t systemMemory[4096];
-
 
 struct callStack
 {
@@ -21,10 +19,6 @@ struct callStack
     // capacity (may not need this...?)
 };
 
-
-
-// declare the Chip-8 RAM space
-// 12 bit index pointer, the maximum of this is 4096
-
+int loadProgram(char programFile[]);
 
 void initializeFont();

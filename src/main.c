@@ -6,11 +6,12 @@
 
 #include <pthread.h>
 
-
+#include "system.h"
 
 
 void* backgroundActivities(void* arg)
 {
+    //printHexChar(0xF, 30, 10);
     FDE();
     return 0;
 }
@@ -24,13 +25,21 @@ int main(void)
         printf("%s", "Couldn't create background non-UI thread.");
         return 1;
     };
+
+
     initializeFont();
+
+    loadProgram("../test_programs/ibm.ch8");
+
+    struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
     printHexChar(0xF, 30, 10);
 
-    drawWindow();
+    //updateWindow(window);
 
 
+    //pthread_join(processThread, NULL);
 
-
+    window = NULL;
+    return 0;
 }
