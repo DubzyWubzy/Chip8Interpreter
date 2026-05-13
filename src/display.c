@@ -39,6 +39,7 @@ bool check_logical_pixel(int x, int y)
 void resetScreen() {
     for (int i = 0; i < WIDTH * HEIGHT; i++)
         buffer[i] = 0x00000000;
+    printf("%s\n", "Screen Reset!");
 }
 
 // TODO: fill screen function?
@@ -73,6 +74,7 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 //  increment x
 void printSprite(const int initialX, const int initialY, const int rowCount)
 {
+    printf("Printing sprite\n");
     // set VF to 0:
     cpuRegisters.V[0xF] = 0;
 
@@ -99,9 +101,10 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
     }
 }
 
-
+/*
 void *drawThread(void *arg)
 {
+
     while (atomic_load(&running))
     {
         pthread_mutex_lock(&buffer_mutex);
@@ -111,6 +114,7 @@ void *drawThread(void *arg)
     }
     return NULL;
 }
+*/
 
 int updateWindow(struct mfb_window *window)
 {
@@ -119,7 +123,9 @@ int updateWindow(struct mfb_window *window)
         // cut them off on Mac
         // maybe using a cute little border or something?
         pthread_mutex_lock(&buffer_mutex);
-        state = mfb_update_ex(window, displayBuffer, WIDTH, HEIGHT);
+        //state = mfb_update_ex(window, displayBuffer, WIDTH, HEIGHT);
+        state = mfb_update_ex(window, buffer, WIDTH, HEIGHT);
+
         pthread_mutex_unlock(&buffer_mutex);
 
         if (state != MFB_STATE_OK)

@@ -16,11 +16,11 @@ target_link_libraries(display PUBLIC minifb system)
 
 add_library(memory src/memory.c)
 target_include_directories(memory PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(display PUBLIC system)
+target_link_libraries(memory PUBLIC system)
 
 add_library(processor src/processor.c)
 target_include_directories(processor PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(display PUBLIC system)
+target_link_libraries(processor PUBLIC system display)
 
 
 # TODO: add instruction libraries

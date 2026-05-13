@@ -27,14 +27,13 @@ int main(void)
 
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
-    pthread_t draw_tid;
-    pthread_create(&draw_tid, NULL, drawThread, NULL);
+    //pthread_t draw_tid;
+    //pthread_create(&draw_tid, NULL, drawThread, NULL);
 
     updateWindow(window);
 
-    pthread_join(draw_tid, NULL);
+    //pthread_join(draw_tid, NULL);
     mfb_close(window);
-
 
     pthread_join(processThread, NULL);
 

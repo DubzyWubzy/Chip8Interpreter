@@ -36,7 +36,7 @@ extern uint8_t oldCpuRegisters[];
 
 
 
-extern struct registerStruct
+struct registerStruct
 {
     uint16_t programCounter;
     uint16_t indexPointer;

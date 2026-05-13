@@ -18,7 +18,7 @@ uint8_t NN;
 uint16_t NNN;
 
 
-inline void op0()
+static inline void op0() // this works!
 {
     if (X == 0)
     {
@@ -31,73 +31,73 @@ inline void op0()
     }
 }
 
-inline void op1()
+static inline void op1()
 {
     // jump: set PC to NNN
     cpuRegisters.programCounter = NNN;
 }
 
-inline void op2()
+static inline void op2()
 {
 
 }
 
-inline void op3()
+static inline void op3()
 {
 
 }
 
-inline void op4()
+static inline void op4()
 {
 
 }
 
-inline void op5()
+static inline void op5()
 {
 
 }
 
-inline void op6()
+static inline void op6()
 {
     // 6XNN (set register VX)
     cpuRegisters.V[X] = NN;
 
 }
 
-inline void op7()
+static inline void op7()
 {
     //7XNN (add value to register VX)
     cpuRegisters.V[X] += NN;
 }
 
-inline void op8()
+static inline void op8()
 {
 
 }
 
-inline void op9()
+static inline void op9()
 {
 
 }
 
-inline void opA()
+static inline void opA()
 {
     //ANNN (set index register I)
     cpuRegisters.indexPointer = NNN;
-
+    // this works!
 }
 
-inline void opB()
+static inline void opB()
 {
 
 }
 
-inline void opC()
+static inline void opC()
 {
 
 }
 
-inline void opD()
+static inline void opD()
 {
     //DXYN (display/draw)
 
@@ -116,15 +116,19 @@ inline void opD()
     // but the drawing of the sprite itself will not.
 
     // ensure that the initial coords wrap around the bounds and call the printSprite function
-    printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
+
+    //printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
+
+    // for testing purposes..
+    printHexChar(0xC, 4, 4);
 }
 
-inline void opE()
+static inline void opE()
 {
 
 }
 
-inline void opF()
+static inline void opF()
 {
 
 }
@@ -139,7 +143,7 @@ void instruction_execute(const uint16_t instruction)
     N = (instruction & 0b0000000000001111); // 4 bit number
 
     NN = ((Y << 4) | N); // 8-bit IMMediate number
-    NNN = ((X << 8) | X); // 12-bit address
+    NNN = ((X << 8) | NN); // 12-bit address
 
     /* start with:
     00E0 (clear screen) [easy]
@@ -150,12 +154,16 @@ void instruction_execute(const uint16_t instruction)
     DXYN (display/draw)
     */
 
+    printf("%x\n", op);
+    printf("%x\n", NNN);
+
     if (op == 0x0) {op0();}
-    if (op == 0x1) {op0();}
-    if (op == 0x6) {op0();}
-    if (op == 0x7) {op0();}
-    if (op == 0xA) {op0();}
-    if (op == 0xD) {op0();}
+    else if (op == 0x1) {op1();}
+    else if (op == 0x6) {op6();}
+    else if (op == 0x7) {op7();}
+    else if (op == 0xA) {opA();}
+    else if (op == 0xD) {opD();}
+    else {printf("%s\n", "INVALID OPCODE");}
 
 }
 
@@ -186,19 +194,20 @@ uint16_t fetch()
     cpuRegisters.programCounter = PC + 2;
 
     // we're fetching the MEMORY FROM the address, NOT the address itself
-    return systemMemory[PC];
+    return (systemMemory[PC] << 8) | systemMemory[(PC + 1)];
 }
 
 
 void *FDE(void *arg)
 {
+    printf("%s\n", "Starting FDE cycle:");
     cpuRegisters.programCounter = 0x0200; // to ensure that the thing gets loaded correctly
 
-    while (true) {
+    while (atomic_load(&running)) {
 
         instruction_execute(fetch());
         // this gets us to about 700 instructions per second
         //usleep(1435.0f); // TODO: another magic number to get rid of
-        usleep(10000.0f); // 10 instructions per second
+        usleep(1000000.0f); // 1 instruction per second
     }
 }
