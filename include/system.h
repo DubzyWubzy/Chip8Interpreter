@@ -2,6 +2,9 @@
 
 #include <stdlib.h>
 
+#include <pthread.h>
+#include <stdatomic.h>
+
 // BELOW CONSTS ARE INTERNAL FOR THE DISPLAY
 #define WIDTH  832
 #define HEIGHT 416
@@ -12,7 +15,11 @@
 
 
 
-extern uint32_t buffer[]; // DISPLAY
+extern uint32_t buffer[];
+uint32_t displayBuffer[WIDTH * HEIGHT]; // DISPLAY
+
+static pthread_mutex_t buffer_mutex = PTHREAD_MUTEX_INITIALIZER;
+static atomic_int running = 1;
 
 extern uint8_t systemMemory[]; // MEMORY
 

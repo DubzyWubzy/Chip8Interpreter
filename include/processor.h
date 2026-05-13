@@ -10,7 +10,6 @@
 #include <unistd.h>
 
 #include "memory.h"
-#include "instructions.h"
 
 
 /* INDEXES:
@@ -25,4 +24,4 @@
 // TODO: Implement timers
 
 
-void FDE();
+void *FDE(void *arg);

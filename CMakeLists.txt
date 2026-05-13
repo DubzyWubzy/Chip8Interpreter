@@ -22,10 +22,6 @@ add_library(processor src/processor.c)
 target_include_directories(processor PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(display PUBLIC system)
 
-add_library(instructions src/instructions.c)
-target_include_directories(instructions PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(display PUBLIC system)
-
 
 # TODO: add instruction libraries
 

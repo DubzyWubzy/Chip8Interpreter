@@ -2,6 +2,14 @@
 
 #include "system.h"
 
+#include <MiniFB.h>
+#include <string.h>
+#include <unistd.h>
+
+
+
+mfb_update_state state;
+
 
 // helper functions for drawWindow
 void set_pixel(int x, int y, bool on)
@@ -91,24 +99,36 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
     }
 }
 
+
+void *drawThread(void *arg)
+{
+    while (atomic_load(&running))
+    {
+        pthread_mutex_lock(&buffer_mutex);
+        memcpy(displayBuffer, buffer, (WIDTH * HEIGHT)); // is there a more efficient way?
+        pthread_mutex_unlock(&buffer_mutex);
+        usleep(16000);
+    }
+    return NULL;
+}
+
 int updateWindow(struct mfb_window *window)
 {
-
-    mfb_update_state state;
-
     do {
-
         // TODO: fix the logical pixels so that the rounded corners don't
         // cut them off on Mac
         // maybe using a cute little border or something?
-
-        state = mfb_update_ex(window, buffer, WIDTH, HEIGHT);
+        pthread_mutex_lock(&buffer_mutex);
+        state = mfb_update_ex(window, displayBuffer, WIDTH, HEIGHT);
+        pthread_mutex_unlock(&buffer_mutex);
 
         if (state != MFB_STATE_OK)
+        {
+            atomic_store(&running, 0);
             break;
+        }
 
     } while(mfb_wait_sync(window));
-
 
     return 0;
 

@@ -4,7 +4,8 @@
 
 #include "system.h"
 
-uint32_t buffer[WIDTH * HEIGHT]; // DISPLAY
+uint32_t buffer[WIDTH * HEIGHT]; // gets copied to diplay 60 times a second
+uint32_t displayBuffer[WIDTH * HEIGHT]; // DISPLAY
 
 uint8_t systemMemory[4096]; // MEMORY, 4096 8-bit blocks
 // TODO: another magic number to get rid of

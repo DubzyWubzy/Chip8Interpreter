@@ -4,42 +4,39 @@
 #include "memory.h"
 #include "processor.h"
 
-#include <pthread.h>
+//#include <pthread.h>
 
 #include "system.h"
 
 
-void* backgroundActivities(void* arg)
-{
-    //printHexChar(0xF, 30, 10);
-    FDE();
-    return 0;
-}
 
 
 int main(void)
 {
-    pthread_t processThread;
-    if (pthread_create(&processThread, NULL, backgroundActivities, NULL) != 0)
-    {
-        printf("%s", "Couldn't create background non-UI thread.");
-        return 1;
-    };
-
-
     initializeFont();
 
     loadProgram("../test_programs/ibm.ch8");
 
+    pthread_t processThread;
+    if (pthread_create(&processThread, NULL, FDE, NULL) != 0)
+    {
+        printf("%s", "Couldn't create background logic thread.");
+        return 1;
+    };
+
+
     struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
-    printHexChar(0xF, 30, 10);
+    pthread_t draw_tid;
+    pthread_create(&draw_tid, NULL, drawThread, NULL);
 
-    //updateWindow(window);
+    updateWindow(window);
+
+    pthread_join(draw_tid, NULL);
+    mfb_close(window);
 
 
-    //pthread_join(processThread, NULL);
+    pthread_join(processThread, NULL);
 
-    window = NULL;
     return 0;
 }

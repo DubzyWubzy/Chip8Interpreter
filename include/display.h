@@ -19,5 +19,5 @@ void printHexChar(uint8_t hexToPrint, int initialX, int initialY);
 
 void printSprite(int initialX, int initialY, int rowCount);
 
-
+void *drawThread(void *arg);
 int updateWindow(struct mfb_window *window);
