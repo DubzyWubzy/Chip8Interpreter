@@ -59,9 +59,8 @@ static inline void op5()
 
 static inline void op6()
 {
-    // 6XNN (set register VX)
+    // 6XNN (set register VX) THIS WORKS!
     cpuRegisters.V[X] = NN;
-
 }
 
 static inline void op7()
@@ -117,10 +116,10 @@ static inline void opD()
 
     // ensure that the initial coords wrap around the bounds and call the printSprite function
 
-    //printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
+    printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
 
     // for testing purposes..
-    printHexChar(0xC, 4, 4);
+    //printHexChar(0xC, 4, 4);
 }
 
 static inline void opE()
@@ -154,8 +153,8 @@ void instruction_execute(const uint16_t instruction)
     DXYN (display/draw)
     */
 
-    printf("%x\n", op);
-    printf("%x\n", NNN);
+    //printf("%x\n", op);
+    //printf("%x\n", NNN);
 
     if (op == 0x0) {op0();}
     else if (op == 0x1) {op1();}
@@ -206,8 +205,8 @@ void *FDE(void *arg)
     while (atomic_load(&running)) {
 
         instruction_execute(fetch());
+
+        usleep(1435.0f); // TODO: another magic number to get rid of,
         // this gets us to about 700 instructions per second
-        //usleep(1435.0f); // TODO: another magic number to get rid of
-        usleep(1000000.0f); // 1 instruction per second
     }
 }

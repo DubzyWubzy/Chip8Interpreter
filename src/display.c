@@ -75,6 +75,7 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 void printSprite(const int initialX, const int initialY, const int rowCount)
 {
     printf("Printing sprite\n");
+
     // set VF to 0:
     cpuRegisters.V[0xF] = 0;
 
@@ -90,10 +91,10 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
                 // here, we're in the pixel itself. Now we check to see if the pixel is alrady on
                 if (check_logical_pixel(initialX + j, initialY + i))
                 {
-                    set_logical_pixel(initialX + j, (initialY + i), true);
+                    set_logical_pixel(initialX + j, (initialY + i), false);
                     cpuRegisters.V[0xF] = 1;
                 } else {
-                    set_logical_pixel(initialX + j, (initialY + i), false);
+                    set_logical_pixel(initialX + j, (initialY + i), true);
                 }
             }
         }
