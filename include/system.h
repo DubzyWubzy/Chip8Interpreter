@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+//#include <stdint.h>
 
 #include <pthread.h>
 #include <stdatomic.h>
@@ -12,6 +13,12 @@
 #define LOGICAL_WIDTH 64
 #define LOGICAL_HEIGHT 32
 #define SCALE 13
+
+
+#define STACK_SIZE 16 // for 16 2-byte entires
+
+
+
 
 
 
@@ -45,6 +52,15 @@ struct registerStruct
 
     uint8_t V[16]; // GP registers
 };
-
 extern struct registerStruct cpuRegisters;
+
+struct stackStruct
+{
+    uint16_t stack[STACK_SIZE];// array where each item is 16 bits
+    int topOfStack; // just the index of the current top of the stack
+};
+
+extern struct stackStruct callStack;
+
+
 

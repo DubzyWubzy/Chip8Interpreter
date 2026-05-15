@@ -20,10 +20,12 @@ uint16_t NNN;
 
 static inline void op0() // this works!
 {
-    if (X == 0)
+    if (X == 0x0)
     {
         // verify that NNN = OE0
-        resetScreen();
+        if (N == 0x0) { resetScreen(); } //00E0
+        else if (N == 0xE) {cpuRegisters.programCounter =  stackPop(); } // 00EE
+        // TODO: test stack
     } else
     {
         // SOME sort of error handling
@@ -34,14 +36,16 @@ static inline void op0() // this works!
 static inline void op1()
 {
     // jump: set PC to NNN
-    cpuRegisters.programCounter = NNN;
+    cpuRegisters.programCounter = NNN; // 1NNN
 }
 
 static inline void op2()
 {
-
+    stackPush(cpuRegisters.programCounter); // TODO: test stack
+    cpuRegisters.programCounter = NNN; // 2NNN
 }
 
+// 3XNN will skip one instruction if the value in VX is equal to NN, and 4XNN will skip if they are not equal.
 static inline void op3()
 {
 
@@ -52,6 +56,7 @@ static inline void op4()
 
 }
 
+// 5XY0 skips if the values in VX and VY are equal, while 9XY0 skips if they are not equal.
 static inline void op5()
 {
 
@@ -79,12 +84,7 @@ static inline void op9()
 
 }
 
-static inline void opA()
-{
-    //ANNN (set index register I)
-    cpuRegisters.indexPointer = NNN;
-    // this works!
-}
+static inline void opA() { cpuRegisters.indexPointer = NNN; } // ANNN
 
 static inline void opB()
 {
@@ -96,31 +96,13 @@ static inline void opC()
 
 }
 
-static inline void opD()
-{
-    //DXYN (display/draw)
+//The first thing to do is to get the X and Y coordinates from VX and VY.
 
-    /*
-    It will draw an N pixels tall sprite from the memory location that the I index register is
-    holding to the screen, at the horizontal X coordinate in VX and the Y coordinate in VY. All
-    the pixels that are “on” in the sprite will flip the pixels on the screen that it is drawn to
-    (from left to right, from most to least significant bit). If any pixels on the screen were turned
-    “off” by this, the VF flag register is set to 1. Otherwise, it’s set to 0.
-    */
+// The starting position will wrap
+// but the drawing of the sprite itself will not.
 
-    // oh lord...
-    //The first thing to do is to get the X and Y coordinates from VX and VY.
-
-    // The starting position will wrap
-    // but the drawing of the sprite itself will not.
-
-    // ensure that the initial coords wrap around the bounds and call the printSprite function
-
-    printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N);
-
-    // for testing purposes..
-    //printHexChar(0xC, 4, 4);
-}
+// ensure that the initial coords wrap around the bounds and call the printSprite function
+static inline void opD() { printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N); }
 
 static inline void opE()
 {
@@ -156,19 +138,28 @@ void instruction_execute(const uint16_t instruction)
     //printf("%x\n", op);
     //printf("%x\n", NNN);
 
-    if (op == 0x0) {op0();}
-    else if (op == 0x1) {op1();}
-    else if (op == 0x6) {op6();}
-    else if (op == 0x7) {op7();}
-    else if (op == 0xA) {opA();}
-    else if (op == 0xD) {opD();}
-    else {printf("%s\n", "INVALID OPCODE");}
+    switch (op)
+    {
+    case 0x0:
+        op0(); break;
+    case 0x1:
+        op1(); break;
+    case 0x6:
+        op6(); break;
+    case 0x7:
+        op7(); break;
+    case 0xA:
+        opA(); break;
+    case 0xD:
+        opD(); break;
+    default:
+        printf("%s\n", "INVALID OPCODE");
+        break;
+    }
 
 }
 
 // TODO: more robust checking
-
-
 
 
 
@@ -206,10 +197,9 @@ void *FDE(void *arg)
 
         instruction_execute(fetch());
 
-        //usleep(1435.0f); // TODO: another magic number to get rid of,
+        usleep(1435.0f); // TODO: another magic number to get rid of,
         // this gets us to about 700 instructions per second
 
-        usleep(50000);
     }
     return 0;
 }

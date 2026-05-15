@@ -11,3 +11,5 @@ uint8_t systemMemory[4096]; // MEMORY, 4096 8-bit blocks
 // TODO: another magic number to get rid of
 
 struct registerStruct cpuRegisters = {0x0};
+
+struct stackStruct callStack = {0x0};
