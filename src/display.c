@@ -39,7 +39,6 @@ bool check_logical_pixel(int x, int y)
 void resetScreen() {
     for (int i = 0; i < WIDTH * HEIGHT; i++)
         buffer[i] = 0x00000000;
-    printf("%s\n", "Screen Reset!");
 }
 
 // TODO: fill screen function?
@@ -74,8 +73,6 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 //  increment x
 void printSprite(const int initialX, const int initialY, const int rowCount)
 {
-    printf("Printing sprite\n");
-
     // set VF to 0:
     cpuRegisters.V[0xF] = 0;
 
@@ -134,7 +131,7 @@ int updateWindow(struct mfb_window *window)
             atomic_store(&running, 0);
             break;
         }
-
+        usleep(16666); // to achieve 60fps
     } while(mfb_wait_sync(window));
 
     return 0;

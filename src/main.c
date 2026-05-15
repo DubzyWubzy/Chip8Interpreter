@@ -25,7 +25,7 @@ int main(void)
     };
 
 
-    struct mfb_window *window = mfb_open_ex("my display", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
+    struct mfb_window *window = mfb_open_ex("Chip-8 Interpreter", WIDTH, HEIGHT, MFB_WF_RESIZABLE);
 
     //pthread_t draw_tid;
     //pthread_create(&draw_tid, NULL, drawThread, NULL);
