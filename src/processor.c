@@ -200,6 +200,8 @@ void *FDE(void *arg)
         usleep(1435.0f); // TODO: another magic number to get rid of,
         // this gets us to about 700 instructions per second
 
+        //usleep(343500.0f); // TODO: another magic number to get rid of,
+
     }
     return 0;
 }

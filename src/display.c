@@ -99,7 +99,7 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
     }
 }
 
-/*
+
 void *drawThread(void *arg)
 {
 
@@ -112,7 +112,7 @@ void *drawThread(void *arg)
     }
     return NULL;
 }
-*/
+
 
 int updateWindow(struct mfb_window *window)
 {

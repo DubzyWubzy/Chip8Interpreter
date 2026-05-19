@@ -1,8 +1,8 @@
-//
-// Created by Zach White on 5/8/26.
-//
 
 #include "system.h"
+
+#include <stdint.h>
+
 
 uint32_t buffer[WIDTH * HEIGHT]; // gets copied to diplay 60 times a second
 uint32_t displayBuffer[WIDTH * HEIGHT]; // DISPLAY

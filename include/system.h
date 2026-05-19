@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
-//#include <stdint.h>
+#include <stdint.h>
 
 #include <pthread.h>
 #include <stdatomic.h>
@@ -23,7 +23,7 @@
 
 
 extern uint32_t buffer[];
-uint32_t displayBuffer[WIDTH * HEIGHT]; // DISPLAY
+extern uint32_t displayBuffer[]; // DISPLAY
 
 static pthread_mutex_t buffer_mutex = PTHREAD_MUTEX_INITIALIZER;
 static atomic_int running = 1;

@@ -6,6 +6,8 @@
 #include <stdlib.h> // TODO: put this in the cmakelists
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
+
 
 
 int loadProgram(char programFile[]);
