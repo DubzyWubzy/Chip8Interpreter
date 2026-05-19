@@ -14,6 +14,7 @@ int loadProgram(char programFile[]);
 
 void initializeFont();
 
+// TODO: maybe put these in system?
 void stackPush(uint16_t toBePushed);
 
 uint16_t stackPop();
