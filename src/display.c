@@ -1,5 +1,4 @@
 #include "display.h"
-
 #include "system.h"
 
 #include <MiniFB.h>

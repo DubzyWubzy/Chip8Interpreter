@@ -45,21 +45,31 @@ static inline void op2()
     cpuRegisters.programCounter = NNN; // 2NNN
 }
 
-// 3XNN will skip one instruction if the value in VX is equal to NN, and 4XNN will skip if they are not equal.
+// 3XNN will skip one instruction if the value in VX is equal to NN...
 static inline void op3()
 {
-
+    if (cpuRegisters.V[X] == NN)
+    {
+        cpuRegisters.programCounter += 2;
+    }
 }
 
+// ... 4XNN will skip if they are not equal.
 static inline void op4()
 {
-
+    if (cpuRegisters.V[X] != NN)
+    {
+        cpuRegisters.programCounter += 2;
+    }
 }
 
-// 5XY0 skips if the values in VX and VY are equal, while 9XY0 skips if they are not equal.
+// 5XY0 skips if the values in VX and VY are equal
 static inline void op5()
 {
-
+    if (cpuRegisters.V[X] == cpuRegisters.V[Y])
+    {
+        cpuRegisters.programCounter += 2;
+    }
 }
 
 static inline void op6()
@@ -76,19 +86,43 @@ static inline void op7()
 
 static inline void op8()
 {
-
+    switch (N)
+    {
+    case 0: cpuRegisters.V[X] = cpuRegisters.V[Y]; break; // Set (VX = VY)
+    case 1: cpuRegisters.V[X] = cpuRegisters.V[X] | cpuRegisters.V[Y]; break; // Bitwise OR (VX | VY)
+    case 2: cpuRegisters.V[X] = cpuRegisters.V[X] & cpuRegisters.V[Y]; break;// Bitwise AND (VX & VY)
+    case 3: cpuRegisters.V[X] = cpuRegisters.V[X] ^ cpuRegisters.V[Y]; break;// Bitwise XOR (VX ^ VY)
+    case 4: cpuRegisters.V[X] = cpuRegisters.V[X] + cpuRegisters.V[Y]; break;// Add (VX = VX + VY)
+    case 5: cpuRegisters.V[X] = cpuRegisters.V[X] - cpuRegisters.V[Y]; break;// Subtract 1 (VX = VX - VY) [carry flag]
+    case 6:
+        cpuRegisters.V[0xF] = (cpuRegisters.V[X] & 0b00000001); // TODO: (maybe) make this a more efficient data type?
+        cpuRegisters.V[X] = cpuRegisters.V[X] >> 1; // Shift right
+        // TODO: (maybe) configure cases 6 and e to do the ambiguous part)
+        break;
+    case 7: cpuRegisters.V[X] = cpuRegisters.V[Y] - cpuRegisters.V[X]; break;// Subtract 2 (VX = VY - VX) [carry flag]
+    case 0xE:
+        cpuRegisters.V[0xF] = (cpuRegisters.V[X] & 0b10000000) >> 7;
+        cpuRegisters.V[X] = cpuRegisters.V[X] << 1; // Shift left
+        break;
+    default:
+        break;
+    }
 }
 
+//9XY0 skips if the values in VX and VY are not equal
 static inline void op9()
 {
-
+    if (cpuRegisters.V[X] != cpuRegisters.V[Y])
+    {
+        cpuRegisters.programCounter += 2;
+    }
 }
 
 static inline void opA() { cpuRegisters.indexPointer = NNN; } // ANNN
 
-static inline void opB()
+static inline void opB() // TODO: another ambiguous instruction, tie this into the other one
 {
-
+    cpuRegisters.programCounter += cpuRegisters.V[0];
 }
 
 static inline void opC()
@@ -140,18 +174,18 @@ void instruction_execute(const uint16_t instruction)
 
     switch (op)
     {
-    case 0x0:
-        op0(); break;
-    case 0x1:
-        op1(); break;
-    case 0x6:
-        op6(); break;
-    case 0x7:
-        op7(); break;
-    case 0xA:
-        opA(); break;
-    case 0xD:
-        opD(); break;
+    case 0x0: op0(); break;
+    case 0x1: op1(); break;
+    case 0x2: op2(); break;
+    case 0x3: op3(); break;
+    case 0x4: op4(); break;
+    case 0x5: op5(); break;
+    case 0x6: op6(); break;
+    case 0x7: op7(); break;
+    case 0x8: op8(); break;
+    case 0x9: op9(); break;
+    case 0xA: opA(); break;
+    case 0xD: opD(); break;
     default:
         printf("%s\n", "INVALID OPCODE");
         break;
