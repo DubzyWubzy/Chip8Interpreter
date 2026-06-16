@@ -127,9 +127,11 @@ static inline void opB() // TODO: another ambiguous instruction, tie this into t
 
 static inline void opC()
 {
-    // generate random number, bitwise and with NN, put result in VX
-    uint8_t randomNum = 
-    cpuRegisters.V[X] = randomNum & NN
+    // generate random number, bitwise ANDs it with NN, put result in VX
+
+    srand(time(NULL));// seed ONLY ONCE with the current time (TODO: bring this closer to the program's beginning)
+    const uint8_t randomNum = rand() % 0xFF;
+    cpuRegisters.V[X] = randomNum & NN;
 
 }
 
@@ -143,7 +145,30 @@ static inline void opD() { printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V
 
 static inline void opE()
 {
+    // finally time for keyboard input...
+    /*1 2 3 c
+     *4 5 6 d
+     *7 8 9 e
+     *a 0 b f
+     *equals...
+     *1 2 3 4
+     *q w e r
+     *a s d f
+     *z x c v
+     */
 
+    // for now, we will just assume that everybody uses QWERTY and implement scancodes a bit later. We must build an MVP
+    // TODO: scancodes
+
+    // abort if V[X] isn't a value between 0x0 and 0xF
+    if (cpuRegisters.V[X] > 0xF)
+    {
+        // TODO: do something here to abort
+    }
+
+
+    //EX9E: PC += 2 if key V[X] is being held down currently
+    //EXA1: PC += 2 if key V[X] is NOT being held down currently
 }
 
 static inline void opF()
