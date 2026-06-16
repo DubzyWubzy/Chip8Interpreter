@@ -29,7 +29,7 @@ int main(void)
 
     //pthread_t draw_tid;
     //pthread_create(&draw_tid, NULL, drawThread, NULL);
-
+    initWindow(window);
     updateWindow(window);
 
     //pthread_join(draw_tid, NULL);

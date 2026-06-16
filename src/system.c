@@ -18,3 +18,6 @@ enum tempKeyboard
 {
     k1,k2,k3,k4,kq,kw,ke,kr,ka,ks,kd,kf,kz,kx,kc,kv,
 };
+// we're probably gonna get rid of the above...
+// ... but we can still use this as a buffer between display (where miniFB lives and where keyboard
+// input will be taken, and processor which will use this keyboard input data.

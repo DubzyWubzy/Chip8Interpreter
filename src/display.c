@@ -9,6 +9,14 @@
 
 mfb_update_state state;
 
+// non-display related MiniFB functions:
+static void
+char_input(struct mfb_window *window, unsigned int char_code) {
+    // any time a character is input, it will be ran through this, along with its char code.
+    // One plan is to go through this -> System -> processor, but is there another way?
+}
+
+
 
 // helper functions for drawWindow
 void set_pixel(int x, int y, bool on)
@@ -112,6 +120,11 @@ void *drawThread(void *arg)
     return NULL;
 }
 
+int initWindow(struct mfb_window *window)
+{
+    mfb_set_char_input_callback(window, char_input);
+    return 0;
+}
 
 int updateWindow(struct mfb_window *window)
 {
@@ -136,5 +149,4 @@ int updateWindow(struct mfb_window *window)
     return 0;
 
 }
-
 
