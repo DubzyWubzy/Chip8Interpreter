@@ -127,6 +127,9 @@ static inline void opB() // TODO: another ambiguous instruction, tie this into t
 
 static inline void opC()
 {
+    // generate random number, bitwise and with NN, put result in VX
+    uint8_t randomNum = 
+    cpuRegisters.V[X] = randomNum & NN
 
 }
 
