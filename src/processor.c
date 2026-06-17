@@ -166,11 +166,15 @@ static inline void opE()
         // TODO: do something here to abort
     }
 
+    // extract bit, turn bit into bool
+    bool isKeyPressed = ((keystate >> cpuRegisters.V[X]) & 1) != 0;
+
 
     //EX9E: PC += 2 if key V[X] is being held down currently
+    if (Y == 9) {if (isKeyPressed) {cpuRegisters.programCounter += 2;}}
+
     //EXA1: PC += 2 if key V[X] is NOT being held down currently
-
-
+    if (Y == 0xA) {{if (~isKeyPressed) {cpuRegisters.programCounter += 2;}}}
 
 }
 

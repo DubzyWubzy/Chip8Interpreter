@@ -28,6 +28,8 @@ struct stackStruct callStack = {0x0};
 
 int pressed_key; // do we need this?
 
+uint16_t keystate;
+
 
 
 // we use this as a buffer between display (where miniFB lives and where keyboard

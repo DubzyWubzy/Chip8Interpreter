@@ -40,6 +40,8 @@ static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bo
     // TODO: if pressed_key = -1, abort
 
     if (is_pressed == false) {
+        printf("%s", "RELEASE");
+        printf("%i", pressed_key);
         keystate &= ~(1 << pressed_key);
         // we keep this example code in so the user can close the window...can we also make it so that it ends the program?
         if (key == MFB_KB_KEY_ESCAPE) {
@@ -47,6 +49,8 @@ static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bo
         }
     } else
     {
+        printf("%s", "PRESS");
+        printf("%i", pressed_key);
         keystate |= (1 << pressed_key);
     }
 }
@@ -156,7 +160,7 @@ void *drawThread(void *arg)
 
 int initWindow(struct mfb_window *window)
 {
-    mfb_set_char_input_callback(window, char_input);
+    mfb_set_keyboard_callback(window, keyboard);
     return 0;
 }
 
