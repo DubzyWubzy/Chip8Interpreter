@@ -169,6 +169,7 @@ static inline void opE()
 
     //EX9E: PC += 2 if key V[X] is being held down currently
     //EXA1: PC += 2 if key V[X] is NOT being held down currently
+    // all we do is check the System's pressed_key value
 
     // minifb/examples/input_events.c :
     // what's the difference between char_input and keyboard? it looks like keyboard will be more useful

@@ -10,12 +10,20 @@
 mfb_update_state state;
 
 // non-display related MiniFB functions:
-static void
-char_input(struct mfb_window *window, unsigned int char_code) {
-    // any time a character is input, it will be ran through this, along with its char code.
-    // One plan is to go through this -> System -> processor, but is there another way?
-}
+static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bool is_pressed) {
+    const char *window_title = "";
+    if (window) {
+        window_title = (const char *) mfb_get_user_data(window);
+    }
+    MFB_LOGI(TEST_TAG, "%s > keyboard: key: %s (pressed: %d) [key_mod: %x]", window_title, mfb_get_key_name(key), is_pressed, mod);
 
+    if (is_pressed == false) {
+        // we keep this example code in so the user can close the window...can we also make it so that it ends the program?
+        if (key == MFB_KB_KEY_ESCAPE) {
+            mfb_close(window);
+        }
+    }
+}
 
 
 // helper functions for drawWindow

@@ -30,7 +30,17 @@ static atomic_int running = 1;
 
 extern uint8_t systemMemory[]; // MEMORY
 
-extern uint8_t oldCpuRegisters[];
+extern uint8_t oldCpuRegisters[]; // TODO: get rid of
+
+
+
+
+// FOR THE KEYBOARD/INPUT (to be separated?)
+char virtualKeyboard[4][4];
+
+extern char pressed_key;
+
+extern void changePressedKey();
 
 
 /* INDEXES:

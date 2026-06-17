@@ -14,10 +14,32 @@ struct registerStruct cpuRegisters = {0x0};
 
 struct stackStruct callStack = {0x0};
 
-enum tempKeyboard
-{
-    k1,k2,k3,k4,kq,kw,ke,kr,ka,ks,kd,kf,kz,kx,kc,kv,
+/*1 2 3 c
+ *4 5 6 d
+ *7 8 9 e
+ *a 0 b f
+ *equals...
+ *1 2 3 4
+ *q w e r
+ *a s d f
+ *z x c v
+ */
+char virtualKeyboard[4][4] = {
+    {'1','2','3','C'},
+    {'4','5','6','D'},
+    {'7','8','9','E'},
+    {'A','0','B','F'}
 };
-// we're probably gonna get rid of the above...
-// ... but we can still use this as a buffer between display (where miniFB lives and where keyboard
+
+
+
+char pressed_key; // do we need this?
+
+void changePressedKey(char key)
+{
+    // screw it let's just do a damn switch case
+}
+
+// we use this as a buffer between display (where miniFB lives and where keyboard
 // input will be taken, and processor which will use this keyboard input data.
+// enum is another way we can go about this...
