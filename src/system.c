@@ -24,21 +24,11 @@ struct stackStruct callStack = {0x0};
  *a s d f
  *z x c v
  */
-char virtualKeyboard[4][4] = {
-    {'1','2','3','C'},
-    {'4','5','6','D'},
-    {'7','8','9','E'},
-    {'A','0','B','F'}
-};
 
 
+int pressed_key; // do we need this?
 
-char pressed_key; // do we need this?
 
-void changePressedKey(char key)
-{
-    // screw it let's just do a damn switch case
-}
 
 // we use this as a buffer between display (where miniFB lives and where keyboard
 // input will be taken, and processor which will use this keyboard input data.

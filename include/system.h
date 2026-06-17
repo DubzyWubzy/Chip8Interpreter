@@ -36,11 +36,11 @@ extern uint8_t oldCpuRegisters[]; // TODO: get rid of
 
 
 // FOR THE KEYBOARD/INPUT (to be separated?)
-char virtualKeyboard[4][4];
 
-extern char pressed_key;
 
-extern void changePressedKey();
+extern int pressed_key; // this probably doesn't need to be extern for safety reasons
+
+extern uint16_t keystate; // pressed/released states for each key
 
 
 /* INDEXES:

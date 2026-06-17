@@ -10,18 +10,44 @@
 mfb_update_state state;
 
 // non-display related MiniFB functions:
-static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bool is_pressed) {
-    const char *window_title = "";
-    if (window) {
-        window_title = (const char *) mfb_get_user_data(window);
+int map_key(char key)
+{
+    switch (key)
+    {
+    case '1': return 0x1;
+    case '2': return 0x2;
+    case '3': return 0x3;
+    case '4': return 0xC;
+    case 'Q': return 0x4;
+    case 'W': return 0x5;
+    case 'E': return 0x6;
+    case 'R': return 0xD;
+    case 'A': return 0x7;
+    case 'S': return 0x8;
+    case 'D': return 0x9;
+    case 'F': return 0xE;
+    case 'Z': return 0xA;
+    case 'X': return 0x0;
+    case 'C': return 0xB;
+    case 'V': return 0xF;
+    default: return -1;
     }
-    MFB_LOGI(TEST_TAG, "%s > keyboard: key: %s (pressed: %d) [key_mod: %x]", window_title, mfb_get_key_name(key), is_pressed, mod);
+}
+
+// a function like this should be moved WAY out of display ngl
+static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bool is_pressed) {
+    pressed_key = map_key(key);
+    // TODO: if pressed_key = -1, abort
 
     if (is_pressed == false) {
+        keystate &= ~(1 << pressed_key);
         // we keep this example code in so the user can close the window...can we also make it so that it ends the program?
         if (key == MFB_KB_KEY_ESCAPE) {
             mfb_close(window);
         }
+    } else
+    {
+        keystate |= (1 << pressed_key);
     }
 }
 
