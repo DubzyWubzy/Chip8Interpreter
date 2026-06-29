@@ -40,8 +40,8 @@ static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bo
     // TODO: if pressed_key = -1, abort
 
     if (is_pressed == false) {
-        printf("%s", "RELEASE");
-        printf("%i", pressed_key);
+        //printf("%s", "RELEASE");
+        //printf("%i", pressed_key);
         keystate &= ~(1 << pressed_key);
         // we keep this example code in so the user can close the window...can we also make it so that it ends the program?
         if (key == MFB_KB_KEY_ESCAPE) {
@@ -49,10 +49,11 @@ static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bo
         }
     } else
     {
-        printf("%s", "PRESS");
-        printf("%i", pressed_key);
+        //printf("%s", "PRESS");
+        //printf("%i", pressed_key);
         keystate |= (1 << pressed_key);
     }
+    //printf("%X\n", keystate);
 }
 
 
@@ -153,7 +154,10 @@ void *drawThread(void *arg)
         pthread_mutex_lock(&buffer_mutex);
         memcpy(displayBuffer, buffer, (WIDTH * HEIGHT)); // is there a more efficient way?
         pthread_mutex_unlock(&buffer_mutex);
-        usleep(16000);
+
+        if (cpuRegisters.delayTimer < 61) {cpuRegisters.delayTimer -= 1;
+        // for the timer registers in the cpu...god this is disorganized wtf is this
+        usleep(16666);
     }
     return NULL;
 }

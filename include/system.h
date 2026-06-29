@@ -64,6 +64,9 @@ struct registerStruct
 };
 extern struct registerStruct cpuRegisters;
 
+// let's put a function in here to initialize the timers?
+void initTimer();
+
 struct stackStruct
 {
     uint16_t stack[STACK_SIZE];// array where each item is 16 bits

@@ -14,6 +14,7 @@
 int main(void)
 {
     initializeFont();
+    initTimer();
 
     loadProgram("../test_programs/ibm.ch8");
 

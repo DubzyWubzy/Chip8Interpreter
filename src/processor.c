@@ -221,6 +221,7 @@ void instruction_execute(const uint16_t instruction)
     case 0x9: op9(); break;
     case 0xA: opA(); break;
     case 0xD: opD(); break;
+    case 0xE: opE(); break;
     default:
         printf("%s\n", "INVALID OPCODE");
         break;
@@ -266,10 +267,13 @@ void *FDE(void *arg)
 
         instruction_execute(fetch());
 
-        usleep(1435.0f); // TODO: another magic number to get rid of,
-        // this gets us to about 700 instructions per second
+        usleep(1429.0f); // TODO: another magic number to get rid of,
+        //
+        // this gets us to about 700 instructions per second.
 
-        //usleep(343500.0f); // TODO: another magic number to get rid of,
+        // every 11.666 times, we will need to increment a counter... is there a better way?
+        // yes, there is. new thread, just a timer thread, does *something* exactly 60 times a second.
+        // OR... already use the display's 60fps limit to our advantage. One frame is one tick for the timers.
 
     }
     return 0;

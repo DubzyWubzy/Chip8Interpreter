@@ -10,7 +10,13 @@ uint32_t displayBuffer[WIDTH * HEIGHT]; // DISPLAY
 uint8_t systemMemory[4096]; // MEMORY, 4096 8-bit blocks
 // TODO: another magic number to get rid of
 
-struct registerStruct cpuRegisters = {0x0};
+struct registerStruct cpuRegisters = {0x0}; // set all the registers to 0 by default...
+
+void initTimer()
+{
+    cpuRegisters.delayTimer = 60;
+    cpuRegisters.soundTimer = 60;
+}
 
 struct stackStruct callStack = {0x0};
 
