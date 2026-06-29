@@ -180,7 +180,60 @@ static inline void opE()
 
 static inline void opF()
 {
+    switch (NN)
+    {
+    case 0x07:
+        cpuRegisters.V[X] = cpuRegisters.delayTimer;
+        break;
+    case 0x15:
+        cpuRegisters.delayTimer = cpuRegisters.V[X];
+        break;
+    case 0x18:
+        cpuRegisters.soundTimer = cpuRegisters.V[X];
+        break;
+    case 0x1e:
+        cpuRegisters.indexPointer += cpuRegisters.V[X];
+        break;
+    case 0x0a:
+        bool isKeyPressed = false;
+        while (!isKeyPressed)
+        {
+            isKeyPressed = ((keystate >> cpuRegisters.V[X]) & 1) != 0;
+        }
+        // TODO: maybe do some PC manipulation here
 
+        break;
+    case 0x29:
+        cpuRegisters.indexPointer = (0x50 + (cpuRegisters.V[X] * 0x5));
+
+        break;
+    case 0x33: ;
+        //uint16_t ogIndex = cpuRegisters.indexPointer;
+        int theNumber;
+        theNumber = cpuRegisters.V[X];
+        systemMemory[cpuRegisters.indexPointer] = theNumber / 100;
+        theNumber %= 100;
+        systemMemory[cpuRegisters.indexPointer + 1] = theNumber / 10;
+        theNumber %= 10;
+        systemMemory[cpuRegisters.indexPointer + 2] = theNumber;
+        break;
+    case 0x55:
+
+        for (int i = 0; i == X; i++)
+        {
+            systemMemory[cpuRegisters.indexPointer + i] = cpuRegisters.V[i];
+        }
+        break;
+    case 0x65:
+        for (int i = 0; i == X; i++)
+        {
+            cpuRegisters.V[i] = systemMemory[cpuRegisters.indexPointer + i];
+        }
+        break;
+
+    default:
+        break;
+    }
 }
 
 
@@ -222,6 +275,7 @@ void instruction_execute(const uint16_t instruction)
     case 0xA: opA(); break;
     case 0xD: opD(); break;
     case 0xE: opE(); break;
+    case 0xF: opF(); break;
     default:
         printf("%s\n", "INVALID OPCODE");
         break;

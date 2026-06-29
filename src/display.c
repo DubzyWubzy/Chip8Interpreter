@@ -146,19 +146,19 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
 }
 
 
-void *drawThread(void *arg)
+void *drawThread(void *arg) // tbh i doubt this function even does anything at this point
 {
 
+    printf("Simple test\n");
     while (atomic_load(&running))
     {
         pthread_mutex_lock(&buffer_mutex);
         memcpy(displayBuffer, buffer, (WIDTH * HEIGHT)); // is there a more efficient way?
         pthread_mutex_unlock(&buffer_mutex);
 
-        if (cpuRegisters.delayTimer < 61) {cpuRegisters.delayTimer -= 1;
-        // for the timer registers in the cpu...god this is disorganized wtf is this
         usleep(16666);
     }
+
     return NULL;
 }
 
@@ -179,6 +179,10 @@ int updateWindow(struct mfb_window *window)
         state = mfb_update_ex(window, buffer, WIDTH, HEIGHT);
 
         pthread_mutex_unlock(&buffer_mutex);
+
+        // for the timer registers in the cpu...god this is disorganized wtf is this
+        if (cpuRegisters.delayTimer != 0) {cpuRegisters.delayTimer -= 1;}
+        if (cpuRegisters.soundTimer != 0) {cpuRegisters.soundTimer -= 1;}
 
         if (state != MFB_STATE_OK)
         {
