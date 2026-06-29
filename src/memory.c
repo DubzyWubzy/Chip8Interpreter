@@ -53,7 +53,15 @@ void initializeFont()
 
 }
 
-void stackPush(uint16_t toBePushed) { callStack.stack[callStack.topOfStack] = toBePushed; callStack.topOfStack += 1; }
+void stackPush(uint16_t toBePushed)
+{
+    callStack.stack[callStack.topOfStack] = toBePushed;
+    callStack.topOfStack += 1;
+}
 
-uint16_t stackPop() { callStack.topOfStack -= 1; return callStack.stack[(callStack.topOfStack + 1)]; }
+uint16_t stackPop()
+{
+    callStack.topOfStack -= 1;
+    return callStack.stack[(callStack.topOfStack + 1)];
+}
 

@@ -24,8 +24,8 @@ static inline void op0() // this works!
     {
         // verify that NNN = OE0
         if (N == 0x0) { resetScreen(); } //00E0
-        else if (N == 0xE) {cpuRegisters.programCounter =  stackPop(); } // 00EE
-        // TODO: test stack
+        //else if (N == 0xE) {cpuRegisters.programCounter =  stackPop(); } // 00EE
+        // TODO: FIX WHATEVER IS HAPPENING HERE (clear screen bs-ery?)
     } else
     {
         // SOME sort of error handling
