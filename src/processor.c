@@ -320,7 +320,7 @@ void *FDE(void *arg)
 
         instruction_execute(fetch());
 
-        usleep(15000); // for debugging
+        //usleep(15000); // slowdown for debugging
 
         //usleep(1429.0f); // TODO: another magic number to get rid of,
         //

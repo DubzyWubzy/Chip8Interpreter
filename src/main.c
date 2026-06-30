@@ -16,7 +16,7 @@ int main(void)
     initializeFont();
     initTimer();
 
-    loadProgram("../test_programs/corax.ch8");
+    loadProgram("../test_programs/flags.ch8");
 
     pthread_t processThread;
     if (pthread_create(&processThread, NULL, FDE, NULL) != 0)
