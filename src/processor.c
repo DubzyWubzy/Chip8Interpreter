@@ -23,9 +23,9 @@ static inline void op0() // this works!
     if (X == 0x0)
     {
         // verify that NNN = OE0
-        if (N == 0x0) { resetScreen(); } //00E0
-        //else if (N == 0xE) {cpuRegisters.programCounter =  stackPop(); } // 00EE
-        // TODO: FIX WHATEVER IS HAPPENING HERE (clear screen bs-ery?)
+        if (NN == 0xE0) { resetScreen(); } //00E0
+        //else if (NN == 0xEE) {cpuRegisters.programCounter = stackPop(); } // 00EE
+        // TODO: make sure stack can be popped SAFELY
     } else
     {
         // SOME sort of error handling
@@ -321,7 +321,7 @@ void *FDE(void *arg)
 
         instruction_execute(fetch());
 
-        usleep(150000); // for debugging
+        usleep(15000); // for debugging
 
         //usleep(1429.0f); // TODO: another magic number to get rid of,
         //

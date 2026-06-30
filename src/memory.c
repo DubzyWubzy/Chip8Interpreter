@@ -61,7 +61,15 @@ void stackPush(uint16_t toBePushed)
 
 uint16_t stackPop()
 {
-    callStack.topOfStack -= 1;
-    return callStack.stack[(callStack.topOfStack + 1)];
+    if (callStack.topOfStack > 0)
+    {
+        callStack.topOfStack -= 1;
+        return callStack.stack[(callStack.topOfStack + 1)];
+    } else
+    {
+        printf("%s\n", "Stack is empty and cannot be popped!");
+        return 1;
+    }
+
 }
 
