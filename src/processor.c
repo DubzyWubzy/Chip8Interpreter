@@ -207,7 +207,6 @@ static inline void opF()
 
         break;
     case 0x33: ;
-        //uint16_t ogIndex = cpuRegisters.indexPointer;
         int theNumber;
         theNumber = cpuRegisters.V[X];
         systemMemory[cpuRegisters.indexPointer] = theNumber / 100;
@@ -217,14 +216,14 @@ static inline void opF()
         systemMemory[cpuRegisters.indexPointer + 2] = theNumber;
         break;
     case 0x55:
-        for (int i = 0; i == X; i++)
+        for (int i = 0; i <= X; i++)
         {
             systemMemory[cpuRegisters.indexPointer + i] = cpuRegisters.V[i];
         }
         //cpuRegisters.indexPointer += X + 1;
         break;
     case 0x65:
-        for (int i = 0; i == X; i++)
+        for (int i = 0; i <= X; i++)
         {
             cpuRegisters.V[i] = systemMemory[cpuRegisters.indexPointer + i];
         }
