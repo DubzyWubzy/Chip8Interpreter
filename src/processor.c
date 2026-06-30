@@ -24,8 +24,7 @@ static inline void op0() // this works!
     {
         // verify that NNN = OE0
         if (NN == 0xE0) { resetScreen(); } //00E0
-        //else if (NN == 0xEE) {cpuRegisters.programCounter = stackPop(); } // 00EE
-        // TODO: make sure stack can be popped SAFELY
+        else if (NN == 0xEE) {cpuRegisters.programCounter = stackPop(); } // 00EE
     } else
     {
         // SOME sort of error handling
@@ -218,17 +217,18 @@ static inline void opF()
         systemMemory[cpuRegisters.indexPointer + 2] = theNumber;
         break;
     case 0x55:
-
         for (int i = 0; i == X; i++)
         {
             systemMemory[cpuRegisters.indexPointer + i] = cpuRegisters.V[i];
         }
+        //cpuRegisters.indexPointer += X + 1;
         break;
     case 0x65:
         for (int i = 0; i == X; i++)
         {
             cpuRegisters.V[i] = systemMemory[cpuRegisters.indexPointer + i];
         }
+        //cpuRegisters.indexPointer += X + 1;
         break;
 
     default:
