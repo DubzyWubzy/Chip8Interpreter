@@ -91,18 +91,42 @@ static inline void op8()
     case 1: cpuRegisters.V[X] = cpuRegisters.V[X] | cpuRegisters.V[Y]; break; // Bitwise OR (VX | VY)
     case 2: cpuRegisters.V[X] = cpuRegisters.V[X] & cpuRegisters.V[Y]; break;// Bitwise AND (VX & VY)
     case 3: cpuRegisters.V[X] = cpuRegisters.V[X] ^ cpuRegisters.V[Y]; break;// Bitwise XOR (VX ^ VY)
-    case 4: cpuRegisters.V[X] = cpuRegisters.V[X] + cpuRegisters.V[Y]; break;// Add (VX = VX + VY)
-    case 5: cpuRegisters.V[X] = cpuRegisters.V[X] - cpuRegisters.V[Y]; break;// Subtract 1 (VX = VX - VY) [carry flag]
-    case 6:
-        cpuRegisters.V[0xF] = (cpuRegisters.V[X] & 0b00000001); // TODO: (maybe) make this a more efficient data type?
+    case 4: ;
+        int actualResult;
+        actualResult = cpuRegisters.V[X] + cpuRegisters.V[Y];
+        cpuRegisters.V[X] = cpuRegisters.V[X] + cpuRegisters.V[Y];
+        if (actualResult > 255) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
+        break;// Add (VX = VX + VY)
+    case 5: {
+        const uint8_t oldVX = cpuRegisters.V[X]; // TODO: reign the scope of this variable in
+        cpuRegisters.V[X] = cpuRegisters.V[X] - cpuRegisters.V[Y];
+        if (oldVX >= cpuRegisters.V[Y]) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
+
+        break;// Subtract 1 (VX = VX - VY) [carry flag]
+    }
+
+    case 6: {
+        const uint8_t oldVX = cpuRegisters.V[X];
         cpuRegisters.V[X] = cpuRegisters.V[X] >> 1; // Shift right
+        if ((oldVX & 0b00000001) == 1) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
+
         // TODO: (maybe) configure cases 6 and e to do the ambiguous part)
         break;
-    case 7: cpuRegisters.V[X] = cpuRegisters.V[Y] - cpuRegisters.V[X]; break;// Subtract 2 (VX = VY - VX) [carry flag]
-    case 0xE:
-        cpuRegisters.V[0xF] = (cpuRegisters.V[X] & 0b10000000) >> 7;
+    }
+
+    case 7:
+        cpuRegisters.V[X] = cpuRegisters.V[Y] - cpuRegisters.V[X];
+
+        if (cpuRegisters.V[Y] >= cpuRegisters.V[X]) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
+
+        break;// Subtract 2 (VX = VY - VX) [carry flag]
+    case 0xE: {
+        const uint8_t oldVX = cpuRegisters.V[X];
         cpuRegisters.V[X] = cpuRegisters.V[X] << 1; // Shift left
+        if ((oldVX & 0b10000000) >> 7 == 1) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
         break;
+    }
+
     default:
         break;
     }
