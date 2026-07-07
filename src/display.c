@@ -119,6 +119,8 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 //  increment x
 void printSprite(const int initialX, const int initialY, const int rowCount)
 {
+    pthread_mutex_lock(&buffer_mutex);
+
     // set VF to 0:
     cpuRegisters.V[0xF] = 0;
 
@@ -143,23 +145,7 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
         }
         tempIndexRegister += 0x1;
     }
-}
-
-
-void *drawThread(void *arg) // tbh i doubt this function even does anything at this point
-{
-
-    printf("Simple test\n");
-    while (atomic_load(&running))
-    {
-        pthread_mutex_lock(&buffer_mutex);
-        memcpy(displayBuffer, buffer, (WIDTH * HEIGHT)); // is there a more efficient way?
-        pthread_mutex_unlock(&buffer_mutex);
-
-        usleep(16666);
-    }
-
-    return NULL;
+    pthread_mutex_unlock(&buffer_mutex);
 }
 
 int initWindow(struct mfb_window *window)
@@ -189,7 +175,7 @@ int updateWindow(struct mfb_window *window)
             atomic_store(&running, 0);
             break;
         }
-        usleep(16666); // to achieve 60fps
+        usleep(16643.64); // TODO: there's gotta be a better way to achieve 60fps
     } while(mfb_wait_sync(window));
 
     return 0;

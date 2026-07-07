@@ -88,9 +88,9 @@ static inline void op8()
     switch (N)
     {
     case 0: cpuRegisters.V[X] = cpuRegisters.V[Y]; break; // Set (VX = VY)
-    case 1: cpuRegisters.V[X] = cpuRegisters.V[X] | cpuRegisters.V[Y]; break; // Bitwise OR (VX | VY)
-    case 2: cpuRegisters.V[X] = cpuRegisters.V[X] & cpuRegisters.V[Y]; break;// Bitwise AND (VX & VY)
-    case 3: cpuRegisters.V[X] = cpuRegisters.V[X] ^ cpuRegisters.V[Y]; break;// Bitwise XOR (VX ^ VY)
+    case 1: cpuRegisters.V[X] = cpuRegisters.V[X] | cpuRegisters.V[Y]; cpuRegisters.V[0xF] = 0; break; // Bitwise OR (VX | VY)
+    case 2: cpuRegisters.V[X] = cpuRegisters.V[X] & cpuRegisters.V[Y]; cpuRegisters.V[0xF] = 0; break;// Bitwise AND (VX & VY)
+    case 3: cpuRegisters.V[X] = cpuRegisters.V[X] ^ cpuRegisters.V[Y]; cpuRegisters.V[0xF] = 0; break;// Bitwise XOR (VX ^ VY)
     case 4: ;
         int actualResult;
         actualResult = cpuRegisters.V[X] + cpuRegisters.V[Y];
@@ -244,14 +244,15 @@ static inline void opF()
         {
             systemMemory[cpuRegisters.indexPointer + i] = cpuRegisters.V[i];
         }
-        //cpuRegisters.indexPointer += X + 1;
+        cpuRegisters.indexPointer += X + 1;
+        // TODO: make this configurable since it's an ambiguous instruction
         break;
     case 0x65:
         for (int i = 0; i <= X; i++)
         {
             cpuRegisters.V[i] = systemMemory[cpuRegisters.indexPointer + i];
         }
-        //cpuRegisters.indexPointer += X + 1;
+        cpuRegisters.indexPointer += X + 1;
         break;
 
     default:
