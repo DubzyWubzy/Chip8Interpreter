@@ -203,7 +203,7 @@ static inline void opE()
     if (Y == 9) {if (isKeyPressed) {cpuRegisters.programCounter += 2;}}
 
     //EXA1: PC += 2 if key V[X] is NOT being held down currently
-    if (Y == 0xA) {{if (~isKeyPressed) {cpuRegisters.programCounter += 2;}}}
+    if (Y == 0xA) {{if (!isKeyPressed) {cpuRegisters.programCounter += 2;}}}
 
 }
 

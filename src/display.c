@@ -175,7 +175,7 @@ int updateWindow(struct mfb_window *window)
 
         // for the timer registers in the cpu...god this is disorganized wtf is this
         if (cpuRegisters.delayTimer != 0) {cpuRegisters.delayTimer -= 1;}
-        if (cpuRegisters.soundTimer != 0) {cpuRegisters.soundTimer -= 1;}
+        if (cpuRegisters.soundTimer != 0) {cpuRegisters.soundTimer -= 1; {printf("%s", "BEEP");}} // TODO: make this actually beep
 
         if (state != MFB_STATE_OK)
         {
