@@ -105,7 +105,9 @@ static inline void op8()
         break;// Subtract 1 (VX = VX - VY) [carry flag]
     }
 
-    case 6: {
+    case 6:
+    {
+        cpuRegisters.V[X] = cpuRegisters.V[Y];
         const uint8_t oldVX = cpuRegisters.V[X];
         cpuRegisters.V[X] = cpuRegisters.V[X] >> 1; // Shift right
         if ((oldVX & 0b00000001) == 1) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
@@ -120,7 +122,9 @@ static inline void op8()
         if (cpuRegisters.V[Y] >= cpuRegisters.V[X]) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
 
         break;// Subtract 2 (VX = VY - VX) [carry flag]
-    case 0xE: {
+    case 0xE:
+    {
+        cpuRegisters.V[X] = cpuRegisters.V[Y];
         const uint8_t oldVX = cpuRegisters.V[X];
         cpuRegisters.V[X] = cpuRegisters.V[X] << 1; // Shift left
         if ((oldVX & 0b10000000) >> 7 == 1) {cpuRegisters.V[0xF] = 1;} else {cpuRegisters.V[0xF] = 0;}
@@ -145,7 +149,9 @@ static inline void opA() { cpuRegisters.indexPointer = NNN; } // ANNN
 
 static inline void opB() // TODO: another ambiguous instruction, tie this into the other one
 {
-    cpuRegisters.programCounter += cpuRegisters.V[0];
+    cpuRegisters.programCounter = NNN + cpuRegisters.V[0];
+    // or later on...
+    //cpuRegisters.programCounter = NNN + cpuRegisters.V[X];
 }
 
 static inline void opC()
@@ -164,7 +170,7 @@ static inline void opC()
 // but the drawing of the sprite itself will not.
 
 // ensure that the initial coords wrap around the bounds and call the printSprite function
-static inline void opD() { printSprite(cpuRegisters.V[X] % WIDTH, cpuRegisters.V[Y] % HEIGHT, N); }
+static inline void opD() { printSprite(cpuRegisters.V[X] % LOGICAL_WIDTH, cpuRegisters.V[Y] % LOGICAL_HEIGHT, N); }
 
 static inline void opE()
 {
@@ -264,25 +270,13 @@ static inline void opF()
 
 void instruction_execute(const uint16_t instruction)
 {
-    op = ((instruction & 0b1111000000000000) >> 12); // using this for the switch statement
-    X = ((instruction & 0b0000111100000000) >> 8); // register
-    Y = ((instruction & 0b0000000011110000) >> 4); // register
-    N = (instruction & 0b0000000000001111); // 4 bit number
+    op = (instruction & 0b1111000000000000) >> 12; // using this for the switch statement
+    X = (instruction & 0b0000111100000000) >> 8; // register
+    Y = (instruction & 0b0000000011110000) >> 4; // register
+    N = instruction & 0b0000000000001111; // 4 bit number
 
-    NN = ((Y << 4) | N); // 8-bit IMMediate number
-    NNN = ((X << 8) | NN); // 12-bit address
-
-    /* start with:
-    00E0 (clear screen) [easy]
-    1NNN (jump) [set PC to NNN=
-    6XNN (set register VX)
-    7XNN (add value to register VX)
-    ANNN (set index register I)
-    DXYN (display/draw)
-    */
-
-    //printf("%x\n", op);
-    //printf("%x\n", NNN);
+    NN = instruction & 0b0000000011111111; // 8-bit IMMediate number
+    NNN = instruction & 0b0000111111111111; // 12-bit address
 
     switch (op)
     {
@@ -297,6 +291,8 @@ void instruction_execute(const uint16_t instruction)
     case 0x8: op8(); break;
     case 0x9: op9(); break;
     case 0xA: opA(); break;
+    case 0xB: opB(); break;
+    case 0xC: opC(); break;
     case 0xD: opD(); break;
     case 0xE: opE(); break;
     case 0xF: opF(); break;

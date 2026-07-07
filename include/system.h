@@ -5,6 +5,7 @@
 
 #include <pthread.h>
 #include <stdatomic.h>
+#include <stdbool.h>
 
 // BELOW CONSTS ARE INTERNAL FOR THE DISPLAY
 #define WIDTH  832
@@ -26,6 +27,9 @@ extern uint32_t buffer[];
 extern uint32_t displayBuffer[]; // DISPLAY
 
 static pthread_mutex_t buffer_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t framerate_mutex = PTHREAD_MUTEX_INITIALIZER; // may not need this
+static pthread_cond_t framerate_cond = PTHREAD_COND_INITIALIZER;
+
 static atomic_int running = 1;
 
 extern uint8_t systemMemory[]; // MEMORY

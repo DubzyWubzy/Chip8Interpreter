@@ -9,6 +9,8 @@
 
 mfb_update_state state;
 
+bool next_frame_ready;
+
 // non-display related MiniFB functions:
 int map_key(char key)
 {
@@ -119,7 +121,13 @@ void printHexChar(const uint8_t hexToPrint, const int initialX, int initialY)
 //  increment x
 void printSprite(const int initialX, const int initialY, const int rowCount)
 {
-    pthread_mutex_lock(&buffer_mutex);
+    pthread_mutex_lock(&framerate_mutex);
+    while (!next_frame_ready)
+    {
+        pthread_cond_wait(&framerate_cond, &framerate_mutex);
+    }
+    next_frame_ready = false;
+    pthread_mutex_unlock(&framerate_mutex);
 
     // set VF to 0:
     cpuRegisters.V[0xF] = 0;
@@ -128,7 +136,7 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
 
     for (int i = 0; i < rowCount; i++)
     {
-        uint8_t currentLine = (systemMemory[tempIndexRegister]); // can this be made const?
+        uint8_t currentLine = (systemMemory[tempIndexRegister]); // can the declaration be moved out?
 
         for (int j = 0; j < 8; j++) {
             if ((currentLine & (1 << (7-j)))) // TODO: make this more descriptive
@@ -145,7 +153,6 @@ void printSprite(const int initialX, const int initialY, const int rowCount)
         }
         tempIndexRegister += 0x1;
     }
-    pthread_mutex_unlock(&buffer_mutex);
 }
 
 int initWindow(struct mfb_window *window)
@@ -176,6 +183,11 @@ int updateWindow(struct mfb_window *window)
             break;
         }
         usleep(16643.64); // TODO: there's gotta be a better way to achieve 60fps
+
+        pthread_mutex_lock(&framerate_mutex);
+        next_frame_ready = true;
+        pthread_cond_signal(&framerate_cond);
+        pthread_mutex_unlock(&framerate_mutex);
     } while(mfb_wait_sync(window));
 
     return 0;
